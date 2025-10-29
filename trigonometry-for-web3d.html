@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算机图形学中的三角函数方法</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .benefit {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .challenge {
+            background-color: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .quote {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .formula {
+            text-align: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: "Times New Roman", serif;
+            font-size: 18px;
+        }
+        .example-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+        }
+        canvas {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>计算机图形学中的三角函数方法</h1>
+        
+        <p>三角函数在计算机图形学中扮演着至关重要的角色。从基本的旋转变换到复杂的光照计算，三角函数都是不可或缺的数学工具。掌握这些函数对于理解和实现图形学算法至关重要。</p>
+        
+        <div class="quote">
+            "三角学在计算机图形学中扮演着重要角色，尤其是在处理旋转和平移时。常用的三角函数包括正弦、余弦和正切。" - 计算机图形学研究
+        </div>
+        
+        <h2>基本三角函数</h2>
+        
+        <h3>1. 正弦函数 (Sine)</h3>
+        <div class="benefit">
+            <p>正弦函数在图形学中最常见的应用之一是描述周期性运动，如旋转、波动动画等。</p>
+            <div class="formula">
+                sin(θ) = 对边 / 斜边
+            </div>
+            <p>在JavaScript中使用：<code>Math.sin(radians)</code></p>
+        </div>
+        
+        <h3>2. 余弦函数 (Cosine)</h3>
+        <div class="benefit">
+            <p>余弦函数通常与正弦函数配合使用，特别是在旋转变换和圆周运动中。</p>
+            <div class="formula">
+                cos(θ) = 邻边 / 斜边
+            </div>
+            <p>在JavaScript中使用：<code>Math.cos(radians)</code></p>
+        </div>
+        
+        <h3>3. 正切函数 (Tangent)</h3>
+        <div class="benefit">
+            <p>正切函数常用于计算角度和斜率，以及在透视投影中的应用。</p>
+            <div class="formula">
+                tan(θ) = 对边 / 邻边 = sin(θ) / cos(θ)
+            </div>
+            <p>在JavaScript中使用：<code>Math.tan(radians)</code></p>
+        </div>
+        
+        <h2>反三角函数</h2>
+        
+        <h3>1. 反正弦函数 (Arcsine)</h3>
+        <div class="benefit">
+            <p>用于从比率计算角度，例如在光照计算中确定光线角度。</p>
+            <div class="formula">
+                arcsin(x) = sin<sup>-1</sup>(x)
+            </div>
+            <p>在JavaScript中使用：<code>Math.asin(value)</code></p>
+        </div>
+        
+        <h3>2. 反余弦函数 (Arccosine)</h3>
+        <div class="benefit">
+            <p>常用于计算两个向量之间的夹角。</p>
+            <div class="formula">
+                arccos(x) = cos<sup>-1</sup>(x)
+            </div>
+            <p>在JavaScript中使用：<code>Math.acos(value)</code></p>
+        </div>
+        
+        <h3>3. 反正切函数 (Arctangent)</h3>
+        <div class="benefit">
+            <p>用于从坐标计算角度，特别是在将笛卡尔坐标转换为极坐标时。</p>
+            <div class="formula">
+                arctan(x) = tan<sup>-1</sup>(x)
+            </div>
+            <p>在JavaScript中使用：<code>Math.atan(value)</code> 或 <code>Math.atan2(y, x)</code></p>
+        </div>
+        
+        <h2>在计算机图形学中的具体应用</h2>
+        
+        <h3>1. 旋转变换</h3>
+        <div class="benefit">
+            <p>旋转变换是三角函数在图形学中最基本的应用之一。</p>
+            <div class="formula">
+                <p>二维旋转变换矩阵：</p>
+                <p>R(θ) = <span style="display:inline-block; vertical-align:middle;">
+                    <span style="border-bottom:1px solid black; display:block; text-align:center;">cos(θ) &nbsp; -sin(θ)</span>
+                    <span style="display:block; text-align:center;">sin(θ) &nbsp; cos(θ)</span>
+                </span></p>
+            </div>
+            <pre>// JavaScript中实现二维旋转变换
+function rotatePoint(x, y, angle) {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    
+    const newX = x * cos - y * sin;
+    const newY = x * sin + y * cos;
+    
+    return { x: newX, y: newY };
+}</pre>
+        </div>
+        
+        <h3>2. 圆和椭圆的绘制</h3>
+        <div class="benefit">
+            <p>使用正弦和余弦函数可以轻松绘制圆形和椭圆。</p>
+            <pre>// 绘制圆形
+function drawCircle(ctx, centerX, centerY, radius, segments) {
+    ctx.beginPath();
+    for (let i = 0; i <= segments; i++) {
+        const angle = (i / segments) * 2 * Math.PI;
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
+        
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    }
+    ctx.stroke();
+}</pre>
+        </div>
+        
+        <h3>3. 波形动画</h3>
+        <div class="benefit">
+            <p>正弦和余弦函数可以创建平滑的周期性动画效果。</p>
+            <pre>// 创建上下浮动的动画效果
+function floatAnimation(time) {
+    const amplitude = 10;  // 振幅
+    const frequency = 0.01; // 频率
+    
+    const yOffset = amplitude * Math.sin(time * frequency);
+    
+    // 应用到对象的Y位置
+    object.position.y = originalY + yOffset;
+}</pre>
+        </div>
+        
+        <h3>4. 光照计算</h3>
+        <div class="benefit">
+            <p>在光照计算中，三角函数用于计算光线角度和表面法线之间的关系。</p>
+            <pre>// 计算漫反射光照
+function calculateDiffuseLight(surfaceNormal, lightDirection) {
+    // 标准化向量
+    surfaceNormal.normalize();
+    lightDirection.normalize();
+    
+    // 计算点积（等同于 cos(θ)）
+    const dotProduct = surfaceNormal.dot(lightDirection);
+    
+    // 使用反余弦函数计算角度
+    const angle = Math.acos(dotProduct);
+    
+    // 计算光照强度
+    const intensity = Math.max(0, dotProduct);
+    
+    return intensity;
+}</pre>
+        </div>
+        
+        <h3>5. 视角和投影</h3>
+        <div class="benefit">
+            <p>在3D图形学中，三角函数用于计算视角和投影变换。</p>
+            <pre>// 计算透视投影的视锥体参数
+function calculatePerspective(fov, aspect, near, far) {
+    const fovRad = fov * (Math.PI / 180); // 转换为弧度
+    const tanFov = Math.tan(fovRad / 2);
+    
+    const top = near * tanFov;
+    const right = top * aspect;
+    const bottom = -top;
+    const left = -right;
+    
+    return { left, right, top, bottom, near, far };
+}</pre>
+        </div>
+        
+        <h3>6. 纹理映射</h3>
+        <div class="benefit">
+            <p>在球面纹理映射中，三角函数用于将2D纹理映射到3D球体表面。</p>
+            <pre>// 将3D球面坐标转换为2D纹理坐标
+function sphereToUv(x, y, z) {
+    const u = 0.5 + Math.atan2(z, x) / (2 * Math.PI);
+    const v = 0.5 - Math.asin(y) / Math.PI;
+    
+    return { u, v };
+}</pre>
+        </div>
+        
+        <h3>7. 关键帧插值</h3>
+        <div class="benefit">
+            <p>在动画中，可以使用三角函数创建平滑的缓动效果。</p>
+            <pre>// 使用余弦函数创建缓入缓出效果
+function easeInOutCos(t) {
+    return 0.5 * (1 - Math.cos(Math.PI * t));
+}
+
+// 应用到动画插值
+function interpolate(start, end, t) {
+    const easedT = easeInOutCos(t);
+    return start + (end - start) * easedT;
+}</pre>
+        </div>
+        
+        <h2>重要概念</h2>
+        
+        <h3>角度与弧度</h3>
+        <div class="benefit">
+            <p>在JavaScript中，三角函数使用弧度而非角度，需要掌握两者之间的转换。</p>
+            <pre>// 角度转弧度
+function degreesToRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+// 弧度转角度
+function radiansToDegrees(radians) {
+    return radians * (180 / Math.PI);
+}</pre>
+        </div>
+        
+        <h3>单位圆</h3>
+        <div class="benefit">
+            <p>单位圆是理解三角函数的关键工具，它将角度与坐标联系起来。</p>
+            <ul>
+                <li>对于单位圆上的任意一点 (x, y)，x = cos(θ)，y = sin(θ)</li>
+                <li>这在旋转变换和圆周运动中特别有用</li>
+            </ul>
+        </div>
+        
+        <h2>性能优化技巧</h2>
+        
+        <h3>查表法</h3>
+        <div class="benefit">
+            <p>对于需要频繁计算的三角函数值，可以预先计算并存储在表中。</p>
+            <pre>// 创建正弦函数查表
+function createSinTable(size) {
+    const table = new Array(size);
+    for (let i = 0; i < size; i++) {
+        table[i] = Math.sin((i / size) * 2 * Math.PI);
+    }
+    return table;
+}
+
+// 使用查表法快速获取正弦值
+const sinTable = createSinTable(360);
+function fastSin(angleInDegrees) {
+    return sinTable[Math.floor(angleInDegrees) % 360];
+}</pre>
+        </div>
+        
+        <h3>近似计算</h3>
+        <div class="benefit">
+            <p>在某些对精度要求不高的场景中，可以使用近似公式提高性能。</p>
+            <pre>// 快速计算小角度的正弦值（泰勒级数近似）
+function fastSinSmallAngle(x) {
+    // sin(x) ≈ x - x³/6 (当x很小时)
+    return x - (x * x * x) / 6;
+}</pre>
+        </div>
+        
+        <h2>在Three.js中的应用示例</h2>
+        
+        <pre>// 创建围绕中心旋转的对象
+function createRotatingObject() {
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    
+    // 添加到场景
+    scene.add(cube);
+    
+    // 动画函数
+    function animate(time) {
+        // 使用三角函数创建旋转动画
+        cube.position.x = Math.cos(time * 0.001) * 5;
+        cube.position.y = Math.sin(time * 0.001) * 3;
+        cube.rotation.x = time * 0.001;
+        cube.rotation.y = time * 0.002;
+        
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    
+    animate(0);
+}
+
+// 创建波浪效果的地面
+function createWavyGround() {
+    const geometry = new THREE.PlaneGeometry(20, 20, 50, 50);
+    const material = new THREE.MeshBasicMaterial({ 
+        color: 0x0088ff,
+        wireframe: true 
+    });
+    
+    const ground = new THREE.Mesh(geometry, material);
+    
+    // 修改顶点位置创建波浪效果
+    const positions = ground.geometry.attributes.position.array;
+    for (let i = 0; i < positions.length; i += 3) {
+        const x = positions[i];
+        const z = positions[i + 2];
+        
+        // 使用三角函数创建波浪效果
+        positions[i + 1] = Math.sin(x * 0.5) * Math.cos(z * 0.5) * 0.5;
+    }
+    
+    ground.geometry.attributes.position.needsUpdate = true;
+    scene.add(ground);
+}</pre>
+        
+        <h2>总结</h2>
+        
+        <p>三角函数在计算机图形学中有着广泛的应用，从基本的旋转变换到复杂的光照计算都离不开它们。掌握这些函数对于图形程序员来说至关重要：</p>
+        
+        <ol>
+            <li><strong>基础函数</strong>：sin、cos、tan以及它们的反函数</li>
+            <li><strong>角度处理</strong>：掌握角度与弧度的转换</li>
+            <li><strong>实际应用</strong>：旋转变换、动画、光照计算等</li>
+            <li><strong>性能优化</strong>：查表法、近似计算等技巧</li>
+        </ol>
+        
+        <div class="quote">
+            "在二维图形编程中，最常使用的三角函数包括正弦(sine, 简称sin)、余弦(cosine, 简称cos)和正切(tangent, 简称tan)。" - 图形系统开发实战课程
+        </div>
+        
+        <p>通过深入理解这些三角函数方法，你将能够更好地掌握计算机图形学的核心概念，并在使用Three.js等图形库时更加得心应手。</p>
+    </div>
+</body>
+</html>
