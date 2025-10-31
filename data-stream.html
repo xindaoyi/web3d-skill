@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>着色器变量传递真实情况</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .section {
+            flex: 1;
+            min-width: 300px;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+
+        .vertex {
+            border: 2px solid #3498db;
+        }
+
+        .fragment {
+            border: 2px solid #e74c3c;
+        }
+
+        .variable-list {
+            background: #e8f4f8;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .code-example {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .explanation {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .important {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .count {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>着色器变量传递真实情况</h1>
+
+        <div class="explanation">
+            <h2>重要澄清</h2>
+            <p>着色器之间传递的 varying 变量数量<strong>不是固定的4个</strong>，而是根据实际使用的变量数量决定的。</p>
+        </div>
+
+        <div class="comparison">
+            <div class="section vertex">
+                <h3>顶点着色器输出 (varying)</h3>
+                <p>可以输出任意数量的 varying 变量，常见包括：</p>
+                <div class="variable-list">
+                    gl_FrontColor // 主颜色<br>
+                    gl_BackColor // 背面颜色<br>
+                    gl_FrontSecondaryColor // 辅助颜色<br>
+                    gl_BackSecondaryColor // 背面辅助颜色<br>
+                    gl_TexCoord[0] // 纹理坐标0<br>
+                    gl_TexCoord[1] // 纹理坐标1<br>
+                    gl_FogFragCoord // 雾坐标<br>
+                    // + 自定义 varying 变量...
+                </div>
+                <p class="count">实际数量：取决于使用的变量数，可以是 0~多个</p>
+            </div>
+
+            <div class="section fragment">
+                <h3>片元着色器输入 (varying)</h3>
+                <p>接收与顶点着色器输出对应的 varying 变量：</p>
+                <div class="variable-list">
+                    gl_Color // 插值后的颜色<br>
+                    gl_SecondaryColor // 插值后的辅助颜色<br>
+                    gl_TexCoord[0] // 插值后的纹理坐标<br>
+                    gl_TexCoord[1] // 插值后的纹理坐标<br>
+                    gl_FogFragCoord // 插值后的雾坐标<br>
+                    // + 对应的自定义 varying 变量...
+                </div>
+                <p class="count">实际数量：与顶点着色器输出的 varying 变量数量相同</p>
+            </div>
+        </div>
+
+        <div class="important">
+            <h2>真实的数据流</h2>
+            <p><strong>关键点：</strong></p>
+            <ol>
+                <li>顶点着色器输出的 varying 变量数量 = 片元着色器接收的 varying 变量数量</li>
+                <li>这个数量<strong>不是固定的</strong>，而是根据实际使用的变量决定</li>
+                <li><code>gl_FrontColor</code>/<code>gl_BackColor</code> 实际上只算作<strong>一个</strong> varying 变量</li>
+            </ol>
+        </div>
+
+        <h2>实际示例</h2>
+
+        <h3>示例1：只使用颜色</h3>
+        <div class="code-example">
+            // 顶点着色器
+            void main() {
+            gl_Position = // ...
+            gl_FrontColor = vec4(1, 0, 0, 1); // 设置颜色
+            gl_BackColor = vec4(0, 0, 1, 1); // 设置背面颜色
+            // 总共: 1个 varying 变量 (颜色)
+            }
+
+            // 片元着色器
+            void main() {
+            gl_FragColor = gl_Color; // 接收: 1个 varying 变量
+            }
+        </div>
+
+        <h3>示例2：使用颜色和纹理坐标</h3>
+        <div class="code-example">
+            // 顶点着色器
+            void main() {
+            gl_Position = // ...
+            gl_FrontColor = vec4(1, 0, 0, 1); // 颜色
+            gl_BackColor = vec4(0, 0, 1, 1);
+            gl_TexCoord[0] = vec4(u, v, 0, 1); // 纹理坐标
+            // 总共: 2个 varying 变量 (颜色 + 纹理坐标)
+            }
+
+            // 片元着色器
+            void main() {
+            vec4 texColor = texture2D(u_texture, gl_TexCoord[0].xy);
+            gl_FragColor = gl_Color * texColor; // 接收: 2个 varying 变量
+            }
+        </div>
+
+        <h3>示例3：现代自定义 varying</h3>
+        <div class="code-example">
+            // 顶点着色器
+            varying vec3 v_normal;
+            varying vec3 v_worldPos;
+            varying vec2 v_uv;
+
+            void main() {
+            gl_Position = // ...
+            v_normal = // ...
+            v_worldPos = // ...
+            v_uv = // ...
+            // 总共: 3个 varying 变量
+            }
+
+            // 片元着色器
+            varying vec3 v_normal;
+            varying vec3 v_worldPos;
+            varying vec2 v_uv;
+
+            void main() {
+            // 接收: 3个 varying 变量
+            vec3 normal = normalize(v_normal);
+            vec3 lightDir = normalize(u_lightPos - v_worldPos);
+            float diffuse = max(0.0, dot(normal, lightDir));
+            gl_FragColor = texture2D(u_texture, v_uv) * diffuse;
+            }
+        </div>
+
+        <h2>WebGL 限制</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>常量</th>
+                    <th>含义</th>
+                    <th>典型值</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>gl_MaxVaryingVectors</code></td>
+                    <td>最大 varying 向量数</td>
+                    <td>WebGL1: 8, WebGL2: 15+</td>
+                </tr>
+                <tr>
+                    <td><code>gl_MaxVaryingComponents</code></td>
+                    <td>最大 varying 分量数</td>
+                    <td>WebGL1: 32, WebGL2: 60+</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="explanation">
+            <h2>总结</h2>
+            <p><strong>正确理解：</strong></p>
+            <ul>
+                <li>顶点着色器输出的 varying 变量数量 = 片元着色器接收的 varying 变量数量</li>
+                <li>这个数量<strong>不是固定为4个</strong>，而是根据实际使用情况决定</li>
+                <li><code>gl_FrontColor</code>/<code>gl_BackColor</code> 实际上只占用<strong>一个</strong> varying 插槽</li>
+                <li>现代 WebGL 更倾向于使用自定义 varying 变量而非内置变量</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP矩阵变换详解</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .transformation {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background-color: #e8f4f8;
+        }
+        .matrix-example {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        .stage-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .stage {
+            text-align: center;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 150px;
+            margin: 5px;
+        }
+        .arrow {
+            font-size: 1.5em;
+            color: #3498db;
+            margin: 0 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MVP 矩阵详解</h1>
+        
+        <p><strong>MVP</strong> 是 <strong>Model-View-Projection</strong> 的缩写，是3D图形渲染中的核心变换过程。</p>
+        
+        <div class="stage-diagram">
+            <div class="stage">模型空间<br>(Model Space)</div>
+            <div class="arrow">→</div>
+            <div class="stage">世界空间<br>(World Space)</div>
+            <div class="arrow">→</div>
+            <div class="stage">观察空间<br>(View Space)</div>
+            <div class="arrow">→</div>
+            <div class="stage">裁剪空间<br>(Clip Space)</div>
+        </div>
+        
+        <div class="transformation">
+            <h3>1. Model Matrix (模型矩阵)</h3>
+            <p>将顶点从<strong>模型局部坐标系</strong>转换到<strong>世界坐标系</strong>。</p>
+            
+            <div class="matrix-example">
+// 模型矩阵示例 (平移+旋转+缩放)
+mat4 modelMatrix = mat4(
+    1.0, 0.0, 0.0, 0.0,  // X轴基向量 (缩放和旋转)
+    0.0, 1.0, 0.0, 0.0,  // Y轴基向量
+    0.0, 0.0, 1.0, 0.0,  // Z轴基向量
+    2.0, 1.0, -3.0, 1.0  // 平移部分 (tx, ty, tz, 1)
+);
+            </div>
+        </div>
+        
+        <div class="transformation">
+            <h3>2. View Matrix (视图矩阵)</h3>
+            <p>将顶点从<strong>世界坐标系</strong>转换到<strong>相机坐标系</strong>（观察空间）。</p>
+            
+            <div class="matrix-example">
+// 视图矩阵通常是相机变换的逆矩阵
+mat4 viewMatrix = lookAt(
+    vec3(0.0, 0.0, 5.0),  // 相机位置 eye
+    vec3(0.0, 0.0, 0.0),  // 目标位置 center
+    vec3(0.0, 1.0, 0.0)   // 上方向 up
+);
+            </div>
+        </div>
+        
+        <div class="transformation">
+            <h3>3. Projection Matrix (投影矩阵)</h3>
+            <p>将顶点从<strong>相机坐标系</strong>转换到<strong>裁剪坐标系</strong>。</p>
+            
+            <div class="matrix-example">
+// 透视投影矩阵
+mat4 perspectiveMatrix = perspective(
+    radians(45.0),  // fov (视野角度)
+    1.333,          // aspect ratio (宽高比)
+    0.1,            // near plane (近平面)
+    100.0           // far plane (远平面)
+);
+
+// 或正交投影矩阵
+mat4 orthoMatrix = ortho(
+    -10.0, 10.0,    // left, right
+    -10.0, 10.0,    // bottom, top
+    0.1, 100.0      // near, far
+);
+            </div>
+        </div>
+        
+        <h2>MVP 组合变换</h2>
+        
+        <div class="matrix-example">
+// 顶点着色器中的典型MVP应用
+attribute vec3 a_position;
+uniform mat4 u_modelMatrix;
+uniform mat4 u_viewMatrix;
+uniform mat4 u_projectionMatrix;
+
+void main() {
+    // 分步变换
+    vec4 worldPosition = u_modelMatrix * vec4(a_position, 1.0);
+    vec4 viewPosition = u_viewMatrix * worldPosition;
+    gl_Position = u_projectionMatrix * viewPosition;
+    
+    // 或组合为一个MVP矩阵
+    mat4 mvpMatrix = u_projectionMatrix * u_viewMatrix * u_modelMatrix;
+    gl_Position = mvpMatrix * vec4(a_position, 1.0);
+}
+        </div>
+        
+        <h2>坐标空间对比表</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>坐标空间</th>
+                    <th>描述</th>
+                    <th>坐标范围</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>模型空间 (Local/Object)</td>
+                    <td>相对于物体自身的坐标系</td>
+                    <td>通常[-1,1]或任意范围</td>
+                </tr>
+                <tr>
+                    <td>世界空间 (World)</td>
+                    <td>整个场景的统一坐标系</td>
+                    <td>任意实数</td>
+                </tr>
+                <tr>
+                    <td>观察空间 (View/Camera)</td>
+                    <td>以相机为原点的坐标系</td>
+                    <td>任意实数</td>
+                </tr>
+                <tr>
+                    <td>裁剪空间 (Clip)</td>
+                    <td>经过投影变换后的坐标</td>
+                    <td>[-w, w] (齐次坐标)</td>
+                </tr>
+                <tr>
+                    <td>标准化设备坐标 (NDC)</td>
+                    <td>裁剪坐标除以w后的结果</td>
+                    <td>[-1, 1]</td>
+                </tr>
+                <tr>
+                    <td>屏幕空间 (Screen)</td>
+                    <td>最终的像素坐标</td>
+                    <td>[0, width] x [0, height]</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2>实际应用示例</h2>
+        
+        <div class="matrix-example">
+// JavaScript中创建MVP矩阵的示例
+function createMVPMatrix(model, view, projection) {
+    // 注意矩阵乘法顺序: P * V * M
+    let mvMatrix = mat4.multiply(view, model);
+    let mvpMatrix = mat4.multiply(projection, mvMatrix);
+    return mvpMatrix;
+}
+
+// 传递给着色器
+gl.uniformMatrix4fv(u_mvpMatrixLocation, false, mvpMatrix);
+        </div>
+        
+        <div style="background: #fff8e1; border-left: 4px solid #ffc107; padding: 15px; margin-top: 20px;">
+            <h3>关键要点:</h3>
+            <ul>
+                <li><strong>顺序很重要</strong>: MVP矩阵相乘的顺序必须是 Projection × View × Model</li>
+                <li><strong>右手坐标系</strong>: OpenGL/WebGL使用右手坐标系</li>
+                <li><strong>齐次坐标</strong>: 所有变换都使用4×4矩阵和4维向量</li>
+                <li><strong>透视除法</strong>: GPU自动执行从裁剪空间到NDC的转换(w除法)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

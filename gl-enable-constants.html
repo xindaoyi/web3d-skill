@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGL glEnable 常量详解</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .constant-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      .constant-table th,
+      .constant-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      .constant-table th {
+        background-color: #3498db;
+        color: white;
+      }
+      .constant-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      .code-example {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 15px;
+        border-radius: 5px;
+        font-family: "Courier New", monospace;
+        margin: 15px 0;
+        overflow-x: auto;
+      }
+      .category {
+        background: #e8f4f8;
+        border-left: 4px solid #3498db;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      .webgl1 {
+        background-color: #e8f5e8;
+      }
+      .webgl2 {
+        background-color: #fff8e1;
+      }
+      .extension {
+        background-color: #fce4e4;
+      }
+      .important {
+        background: #e3f2fd;
+        border-left: 4px solid #3498db;
+        padding: 15px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>WebGL glEnable 常量详解</h1>
+
+      <div class="important">
+        <h2>概述</h2>
+        <p>
+          <code>gl.enable()</code> 用于启用 WebGL 的各种功能状态。<code
+            >gl.disable()</code
+          >
+          用于禁用这些状态。 这些状态控制渲染管线的不同方面。
+        </p>
+      </div>
+
+      <h2>WebGL 1.0 核心常量</h2>
+
+      <table class="constant-table">
+        <thead>
+          <tr>
+            <th>常量</th>
+            <th>值</th>
+            <th>功能</th>
+            <th>描述</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="webgl1">
+            <td><code>gl.BLEND</code></td>
+            <td>0x0BE2</td>
+            <td>混合</td>
+            <td>启用颜色混合（透明度）</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.CULL_FACE</code></td>
+            <td>0x0B44</td>
+            <td>面剔除</td>
+            <td>启用背面剔除（不渲染背向面）</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.DEPTH_TEST</code></td>
+            <td>0x0B71</td>
+            <td>深度测试</td>
+            <td>启用深度缓冲区测试</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.DITHER</code></td>
+            <td>0x0BD0</td>
+            <td>抖动</td>
+            <td>启用颜色抖动（默认启用）</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.POLYGON_OFFSET_FILL</code></td>
+            <td>0x8037</td>
+            <td>多边形偏移</td>
+            <td>启用多边形填充偏移</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.SAMPLE_ALPHA_TO_COVERAGE</code></td>
+            <td>0x809E</td>
+            <td>Alpha 覆盖</td>
+            <td>启用 Alpha 到覆盖采样</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.SAMPLE_COVERAGE</code></td>
+            <td>0x80A0</td>
+            <td>覆盖采样</td>
+            <td>启用覆盖采样抗锯齿</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.SCISSOR_TEST</code></td>
+            <td>0x0C11</td>
+            <td>剪裁测试</td>
+            <td>启用剪裁测试（限制渲染区域）</td>
+          </tr>
+          <tr class="webgl1">
+            <td><code>gl.STENCIL_TEST</code></td>
+            <td>0x0B90</td>
+            <td>模板测试</td>
+            <td>启用模板缓冲区测试</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>WebGL 2.0 额外常量</h2>
+
+      <table class="constant-table">
+        <thead>
+          <tr>
+            <th>常量</th>
+            <th>值</th>
+            <th>功能</th>
+            <th>描述</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="webgl2">
+            <td><code>gl.RASTERIZER_DISCARD</code></td>
+            <td>0x8C89</td>
+            <td>光栅化丢弃</td>
+            <td>丢弃光栅化结果（变换反馈时使用）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>扩展常量</h2>
+
+      <table class="constant-table">
+        <thead>
+          <tr>
+            <th>常量</th>
+            <th>扩展</th>
+            <th>功能</th>
+            <th>描述</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="extension">
+            <td><code>gl.FRAGMENT_SHADER_DERIVATIVE_HINT</code></td>
+            <td>GL_OES_standard_derivatives</td>
+            <td>着色器导数提示</td>
+            <td>启用片段着色器导数函数</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>各功能详细说明</h2>
+
+      <div class="category">
+        <h3>1. gl.BLEND - 颜色混合</h3>
+        <div class="code-example">
+          // 启用透明度混合 gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,
+          gl.ONE_MINUS_SRC_ALPHA); // 使用示例 function
+          renderTransparentObject() { gl.enable(gl.BLEND);
+          gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); // 渲染半透明对象
+          gl.drawArrays(gl.TRIANGLES, 0, vertexCount); // 可以禁用混合
+          gl.disable(gl.BLEND); }
+        </div>
+      </div>
+
+      <div class="category">
+        <h3>2. gl.CULL_FACE - 面剔除</h3>
+        <div class="code-example">
+          // 启用背面剔除 gl.enable(gl.CULL_FACE); gl.cullFace(gl.BACK); //
+          剔除背面 gl.frontFace(gl.CCW); // 逆时针为正面 // 使用示例 function
+          renderOptimizedScene() { gl.enable(gl.CULL_FACE); //
+          不会渲染背向的面，提高性能 gl.drawArrays(gl.TRIANGLES, 0,
+          vertexCount); }
+        </div>
+      </div>
+
+      <div class="category">
+        <h3>3. gl.DEPTH_TEST - 深度测试</h3>
+        <div class="code-example">
+          // 启用深度测试（3D 场景必需） gl.enable(gl.DEPTH_TEST);
+          gl.depthFunc(gl.LESS); // 深度值小的覆盖大的 // 使用示例 function
+          render3DScene() { gl.enable(gl.DEPTH_TEST);
+          gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //
+          按正确的深度顺序渲染对象 renderObjects(); }
+        </div>
+      </div>
+
+      <div class="category">
+        <h3>4. gl.SCISSOR_TEST - 剪裁测试</h3>
+        <div class="code-example">
+          // 启用剪裁测试 gl.enable(gl.SCISSOR_TEST); gl.scissor(100, 100, 200,
+          150); // 设置剪裁区域 // 使用示例 function renderToViewport(x, y,
+          width, height) { gl.enable(gl.SCISSOR_TEST); gl.scissor(x, y, width,
+          height); // 只在指定区域渲染 renderScene();
+          gl.disable(gl.SCISSOR_TEST); }
+        </div>
+      </div>
+
+      <div class="category">
+        <h3>5. gl.STENCIL_TEST - 模板测试</h3>
+        <div class="code-example">
+          // 启用模板测试 gl.enable(gl.STENCIL_TEST); gl.stencilFunc(gl.ALWAYS,
+          1, 0xFF); gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE); //
+          使用示例：阴影体积 function renderWithStencilShadows() {
+          gl.enable(gl.STENCIL_TEST); // 渲染模板 gl.stencilFunc(gl.ALWAYS, 1,
+          0xFF); gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+          renderShadowVolumes(); // 使用模板渲染 gl.stencilFunc(gl.NOTEQUAL, 1,
+          0xFF); renderScene(); gl.disable(gl.STENCIL_TEST); }
+        </div>
+      </div>
+
+      <div class="category">
+        <h3>6. gl.RASTERIZER_DISCARD - 光栅化丢弃 (WebGL 2.0)</h3>
+        <div class="code-example">
+          // WebGL 2.0: 启用光栅化丢弃（用于变换反馈）
+          gl.enable(gl.RASTERIZER_DISCARD); // 使用示例：变换反馈 function
+          updateParticlesWithTransformFeedback() { // 启用变换反馈
+          gl.enable(gl.RASTERIZER_DISCARD); // 只执行顶点着色器，不进行光栅化
+          gl.beginTransformFeedback(gl.POINTS); gl.drawArrays(gl.POINTS, 0,
+          particleCount); gl.endTransformFeedback();
+          gl.disable(gl.RASTERIZER_DISCARD); }
+        </div>
+      </div>
+
+      <h2>状态管理最佳实践</h2>
+
+      <div class="code-example">
+        // 状态管理类示例 class WebGLStateManager { constructor(gl) { this.gl =
+        gl; this.enabledStates = new Set(); } enable(state) { if
+        (!this.enabledStates.has(state)) { this.gl.enable(state);
+        this.enabledStates.add(state); } } disable(state) { if
+        (this.enabledStates.has(state)) { this.gl.disable(state);
+        this.enabledStates.delete(state); } } reset() { // 禁用所有启用的状态
+        for (let state of this.enabledStates) { this.gl.disable(state); }
+        this.enabledStates.clear(); } } // 使用示例 const stateManager = new
+        WebGLStateManager(gl); function renderScene() {
+        stateManager.enable(gl.DEPTH_TEST); stateManager.enable(gl.CULL_FACE);
+        stateManager.enable(gl.BLEND); // 渲染... //
+        状态会自动管理，避免重复设置 }
+      </div>
+
+      <div class="important">
+        <h2>关键要点总结</h2>
+        <ul>
+          <li><strong>WebGL 1.0：</strong>9 个核心启用常量</li>
+          <li>
+            <strong>WebGL 2.0：</strong>额外增加 1 个常量
+            (<code>RASTERIZER_DISCARD</code>)
+          </li>
+          <li><strong>扩展：</strong>通过扩展可以获得额外常量</li>
+          <li><strong>性能：</strong>只启用需要的功能，避免不必要的开销</li>
+          <li>
+            <strong>默认状态：</strong>大多数状态默认是禁用的，除了
+            <code>DITHER</code>
+          </li>
+          <li><strong>状态管理：</strong>合理管理启用/禁用状态可以提高性能</li>
+        </ul>
+      </div>
+
+      <h2>常用组合示例</h2>
+
+      <div class="code-example">
+        // 3D 场景的标准设置 function setup3DScene() { gl.enable(gl.DEPTH_TEST);
+        // 深度测试 gl.enable(gl.CULL_FACE); // 面剔除 gl.enable(gl.DITHER); //
+        颜色抖动（通常默认启用） } // 2D/UI 渲染设置 function setup2DRendering()
+        { gl.disable(gl.DEPTH_TEST); // 2D 不需要深度测试
+        gl.disable(gl.CULL_FACE); // 2D 通常是双面的 gl.enable(gl.BLEND); //
+        启用透明度 gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); } //
+        高级渲染设置 function setupAdvancedRendering() {
+        gl.enable(gl.DEPTH_TEST); gl.enable(gl.CULL_FACE);
+        gl.enable(gl.STENCIL_TEST); // 模板测试 gl.enable(gl.BLEND); // 混合
+        gl.enable(gl.SCISSOR_TEST); // 剪裁测试 }
+      </div>
+    </div>
+  </body>
+</html>
